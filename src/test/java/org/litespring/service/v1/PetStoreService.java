@@ -1,4 +1,4 @@
 package org.litespring.service.v1;
 
-public class PerStoreService {
+public class PetStoreService {
 }

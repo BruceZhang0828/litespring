@@ -5,7 +5,7 @@ import org.junit.Test;
 import org.litespring.beans.BeanDefinition;
 import org.litespring.beans.factory.BeanFactory;
 import org.litespring.beans.factory.support.DefaultBeanFactory;
-import org.litespring.service.v1.PerStoreService;
+import org.litespring.service.v1.PetStoreService;
 
 public class BeanFactoryTest {
     //目标给定给一个bean的配置文件
@@ -16,10 +16,31 @@ public class BeanFactoryTest {
         // 根据bean的id创建
         BeanDefinition bd = factory.getBeanDefinition("petStore");
 
-        Assert.assertEquals("org.litespring.v1.PetStoreService",bd.getBeanName());
+        Assert.assertEquals("org.litespring.service.v1.PetStoreService",bd.getBeanName());
         //获取bean的内容
-        PerStoreService perStoreService = (PerStoreService)factory.getBean("petStore");
+        PetStoreService perStoreService = (PetStoreService)factory.getBean("petStore");
 
         Assert.assertNotNull(perStoreService);
+    }
+
+    @Test
+    public void testInvlidBean(){
+
+        BeanFactory factory = new DefaultBeanFactory("petstore-v1.xml");
+        try {
+            factory.getBean("invlidBean");
+        } catch (Exception e) {
+            return;
+        }
+        Assert.fail("expect BeanCreationException");
+    }
+    @Test
+    public void testInvlidXml(){
+        try {
+            new DefaultBeanFactory("xxxxx.xml");
+        } catch (Exception e) {
+            return;
+        }
+        Assert.fail("expect BeanDefinitionStoreException");
     }
 }
