@@ -16,48 +16,11 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-
-public class DefaultBeanFactory implements BeanFactory {
-    public static final String  ID_ATTRIBUTE= "id";
-    public static final String  CLASS_ATTRIBUTE= "class";
+/**
+ * 将相关 加载xml文件的功能 抽离出去 保证类的单一职责
+ */
+public class DefaultBeanFactory implements BeanFactory,BeanDefinitionRegistry{
     private final Map<String,BeanDefinition> beanDefinitionMap = new ConcurrentHashMap<String, BeanDefinition>();
-
-    public DefaultBeanFactory(String config) {
-        loadBeanDeFinition(config);
-    }
-
-    private void loadBeanDeFinition(String config) {
-        InputStream resourceAsStream = null;
-        try {
-            ClassLoader cl = ClassUtils.getDefaultClassLoader();//classUtils Spring中定义的工具类 这里用来获取类加载器
-            resourceAsStream = cl.getResourceAsStream(config);
-            SAXReader saxReader = new SAXReader();
-            Document document = saxReader.read(resourceAsStream);
-            Element rootElement = document.getRootElement(); //获取根部标签
-            Iterator<Element> iterator = rootElement.elementIterator();
-            while (iterator.hasNext()){
-                Element ele = iterator.next();
-                String id = ele.attributeValue(ID_ATTRIBUTE);
-                String beanClassName = ele.attributeValue(CLASS_ATTRIBUTE);
-                BeanDefinition bd = new GenericBeanDefinition(id,beanClassName);
-                this.beanDefinitionMap.put(id,bd);
-
-            }
-        } catch (DocumentException e) {
-            throw new BeanDefinitionStoreException("IOException parsing XML document");
-        }
-        finally {
-            if(resourceAsStream !=null) {
-                try {
-                    resourceAsStream.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-
-    }
-
     public Object getBean(String beanId) {
         BeanDefinition bd = this.getBeanDefinition(beanId);
         if(bd ==null){
@@ -75,5 +38,9 @@ public class DefaultBeanFactory implements BeanFactory {
 
     public org.litespring.beans.BeanDefinition getBeanDefinition(String beanId) {
         return this.beanDefinitionMap.get(beanId);
+    }
+
+    public void registryBeanDefinition(String beanId, BeanDefinition beanDefinition) {
+        this.beanDefinitionMap.put(beanId,beanDefinition);
     }
 }
