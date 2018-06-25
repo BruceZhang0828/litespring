@@ -11,13 +11,17 @@ import org.litespring.core.io.Resource;
 public class ClassPathXmlApplicationContext extends AbstractApplicationContext {
     private DefaultBeanFactory factory = null;
 
+
     public ClassPathXmlApplicationContext(String configFile) {
         super(configFile);
     }
+
+
 
     @Override
     protected Resource getResourceByPath(String configFile) {
         Resource resource = new ClassPathResource(configFile);
         return resource;
     }
+
 }
