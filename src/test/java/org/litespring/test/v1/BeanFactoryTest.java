@@ -30,7 +30,9 @@ public class BeanFactoryTest {
         Resource resource = new ClassPathResource("petstore-v1.xml");
         xmlBeanDefinitionReader.loadBeanDeFinition(resource);
         BeanDefinition bd = factory.getBeanDefinition("petStore");
-
+        Assert.assertTrue(bd.isSingleton());
+        Assert.assertFalse(bd.isPrototype());
+        Assert.assertEquals(BeanDefinition.SCOPE_DEFAULT,bd.getScope());
         Assert.assertEquals("org.litespring.service.v1.PetStoreService",bd.getBeanName());
         //获取bean的内容
         PetStoreService perStoreService = (PetStoreService)factory.getBean("petStore");

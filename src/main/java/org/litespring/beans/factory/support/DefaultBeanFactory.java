@@ -20,7 +20,8 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * 将相关 加载xml文件的功能 抽离出去 保证类的单一职责
  */
-public class DefaultBeanFactory implements ConfigurableBeanFactory,BeanDefinitionRegistry{
+public class DefaultBeanFactory extends DefaultSingletonBeanRegistry
+        implements ConfigurableBeanFactory,BeanDefinitionRegistry{
     private final Map<String,BeanDefinition> beanDefinitionMap = new ConcurrentHashMap<String, BeanDefinition>();
     private ClassLoader beanClassLoader;
     public Object getBean(String beanId) {
@@ -28,13 +29,24 @@ public class DefaultBeanFactory implements ConfigurableBeanFactory,BeanDefinitio
         if(bd ==null){
             throw new BeanCreationException("bean Definition does not exist");
         }
+        if(bd.isSingleton()){
+            Object singleton = this.getSingleton(beanId);
+            if(singleton==null){
+                singleton = creatBean(bd);
+            }
+            return  singleton;
+        }
+        return creatBean(bd);
+    }
+
+    private Object creatBean(BeanDefinition bd){
         String beanClassName = bd.getBeanName();
         try {
             Class<?> claz = this.getBeanClassLoader().loadClass(beanClassName);
-                return claz.newInstance();
-            } catch (Exception e) {
-                throw  new BeanCreationException("Create bean for "+beanClassName+"fail");
-            }
+            return claz.newInstance();
+        } catch (Exception e) {
+            throw  new BeanCreationException("Create bean for "+beanClassName+"fail");
+        }
     }
 
     public org.litespring.beans.BeanDefinition getBeanDefinition(String beanId) {
