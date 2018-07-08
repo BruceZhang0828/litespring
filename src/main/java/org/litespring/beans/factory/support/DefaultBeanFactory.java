@@ -5,15 +5,22 @@ import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 import org.litespring.beans.BeanDefinition;
+import org.litespring.beans.PropertyValue;
+import org.litespring.beans.SimpleTypeConverter;
 import org.litespring.beans.factory.BeanCreationException;
 import org.litespring.beans.factory.BeanDefinitionStoreException;
 import org.litespring.beans.factory.BeanFactory;
 import org.litespring.beans.factory.config.ConfigurableBeanFactory;
 import org.litespring.util.ClassUtils;
 
+import java.beans.BeanInfo;
+import java.beans.IntrospectionException;
+import java.beans.Introspector;
+import java.beans.PropertyDescriptor;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -40,12 +47,64 @@ public class DefaultBeanFactory extends DefaultSingletonBeanRegistry
     }
 
     private Object creatBean(BeanDefinition bd){
+
+        //创建实例
+        Object bean = instantiateBean(bd);
+        //设置属性
+        populateBean(bd,bean);
+
+
+        return bean;
+    }
+
+    /**
+     * 创建实例的方法
+     * @param bd
+     * @return
+     */
+    private Object instantiateBean(BeanDefinition bd){
         String beanClassName = bd.getBeanName();
         try {
             Class<?> claz = this.getBeanClassLoader().loadClass(beanClassName);
             return claz.newInstance();
         } catch (Exception e) {
             throw  new BeanCreationException("Create bean for "+beanClassName+"fail");
+        }
+    }
+
+    /**
+     * 设置属性
+     * @param bd
+     * @param bean
+     */
+    protected void populateBean(BeanDefinition bd, Object bean) {
+        List<PropertyValue> propertyValues = bd.getPropertyValues();
+        //如果没有属性
+        if(propertyValues==null||propertyValues.isEmpty()){
+            return;
+        }
+        //设置beanfactory
+        BeanDefinitionValueResolver resolver = new BeanDefinitionValueResolver(this);
+        SimpleTypeConverter converter = new SimpleTypeConverter();
+        try {
+            for (PropertyValue propertyValue:propertyValues) {
+                String propertyname = propertyValue.getName();
+                Object originalValue = propertyValue.getValue();//获取的ref=""的值
+                Object resolvedValue = resolver.resolveValueIfNecessary(originalValue);//获取的ref相关的实例类
+                BeanInfo beanInfo = Introspector.getBeanInfo(bean.getClass());//反射一个bean的信息
+                PropertyDescriptor[] propertyDescriptors = beanInfo.getPropertyDescriptors();//获取bean中 属性的数组
+                for (PropertyDescriptor descriptor:propertyDescriptors) {
+                    if(descriptor.getName().equals(propertyname)){
+                        Object converterValue = converter.convertIfNecessaray(resolvedValue, descriptor.getPropertyType());
+                        descriptor.getWriteMethod().invoke(bean,converterValue);
+                        break;
+                    }
+                }
+
+
+            }
+        } catch (Exception e) {
+            throw new BeanCreationException("Failed to obtain BeanInfo for class ["+bd.getBeanName()+"]");
         }
     }
 

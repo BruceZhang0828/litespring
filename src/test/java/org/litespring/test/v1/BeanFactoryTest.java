@@ -43,7 +43,7 @@ public class BeanFactoryTest {
     public void testInvlidBean(){
 
         try {
-            //xmlBeanDefinitionReader.loadBeanDeFinition("petstore-v1.xml");
+            //xmlBeanDefinitionReader.loadBeanDeFinition("petstore-v2.xml");
             Resource resource = new ClassPathResource("petstore-v1.xml");
             xmlBeanDefinitionReader.loadBeanDeFinition(resource);
             factory.getBean("invlidBean");
