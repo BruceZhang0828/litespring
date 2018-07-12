@@ -21,4 +21,14 @@ public interface BeanDefinition {
      * @return
      */
     public List<PropertyValue> getPropertyValues();
+
+    /**
+     * 获取构造注入的类
+     * @return
+     */
+    ConstructorArgument getConstructorArgument();
+
+    String getID();
+
+    boolean hasConstructorArgumentValus();
 }

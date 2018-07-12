@@ -20,7 +20,7 @@ public class CustomNumberEditorTest {
 
         try {
             //传入的字符串 不符合 int 类型 则抛出 IllegalArgument
-            customNumberEditor.setAsText("3.1");
+            customNumberEditor.setAsText("v3.1");
         } catch (IllegalArgumentException e) {
             return;
         }

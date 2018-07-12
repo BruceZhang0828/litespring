@@ -8,6 +8,7 @@ import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 import org.litespring.beans.BeanDefinition;
+import org.litespring.beans.ConstructorArgument;
 import org.litespring.beans.PropertyValue;
 import org.litespring.beans.factory.BeanDefinitionStoreException;
 import org.litespring.beans.factory.config.RuntimeBeanReference;
@@ -32,6 +33,9 @@ public class XmlBeanDefinitionReader {
     public static final String  REF_ATTRIBUTE= "ref";
     public static final String  VALUE_ATTRIBUTE= "value";
     public static final String  NAME_ATTRIBUTE= "name";
+    public static final String CONSTRUCTOR_ARG_ELEMENT = "constructor-arg";
+    public static final String TYPE_ATTRIBUTE = "type";
+
     protected final Log logger = LogFactory.getLog(getClass());
     BeanDefinitionRegistry registry;
     public XmlBeanDefinitionReader(BeanDefinitionRegistry registry) {
@@ -62,6 +66,8 @@ public class XmlBeanDefinitionReader {
                 /*this.beanDefinitionMap.put(id,bd);*/
                 //进行解析属性
                 parsePropertyElement(ele,bd);
+                //解析构造注入的属性
+                parseConstructorArgElements(ele,bd);
                 this.registry.registryBeanDefinition(id,bd);
 
             }
@@ -80,6 +86,34 @@ public class XmlBeanDefinitionReader {
             }
         }
 
+    }
+
+    /**
+     *
+     * @param ele
+     * @param bd
+     */
+    private void parseConstructorArgElements(Element beanEle, BeanDefinition bd) {
+        Iterator iterator = beanEle.elementIterator(CONSTRUCTOR_ARG_ELEMENT);
+        while (iterator.hasNext()) {
+            Element ele = (Element) iterator.next();
+            parseConstructorArgElement(ele, bd);
+        }
+    }
+
+    private void parseConstructorArgElement(Element ele, BeanDefinition bd) {
+        String typeAttr = ele.attributeValue(TYPE_ATTRIBUTE);
+        String nameAttr = ele.attributeValue(NAME_ATTRIBUTE);
+        Object value = parsePropertyValue(ele, bd, null);
+        ConstructorArgument.ValueHolder valueHolder = new ConstructorArgument.ValueHolder(value);
+
+        if(StringUtils.hasLenth(typeAttr)){
+            valueHolder.setType(typeAttr);
+        }
+        if(StringUtils.hasLenth(nameAttr)){
+            valueHolder.setName(nameAttr);
+        }
+        bd.getConstructorArgument().addArgumentValue(valueHolder);
     }
 
     /**
