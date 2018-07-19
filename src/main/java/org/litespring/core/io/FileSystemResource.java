@@ -11,6 +11,11 @@ public class FileSystemResource implements Resource {
     private String path;
     private File file;
 
+    public FileSystemResource(File file) {
+        this.path=file.getPath();
+        this.file = file;
+    }
+
     /**
      * 构造方法 创建一个
      * @param path
