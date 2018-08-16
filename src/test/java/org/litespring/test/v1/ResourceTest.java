@@ -28,7 +28,7 @@ public class ResourceTest {
 
     @Test
     public void testFileSystemResource() throws IOException {
-        Resource r = new FileSystemResource("H:\\petstore-v1.xml");
+        Resource r = new FileSystemResource("E:\\petstore-v1.xml");
         InputStream is = null;
         try {
             //这里测试 不充分

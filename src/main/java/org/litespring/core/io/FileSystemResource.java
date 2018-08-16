@@ -22,6 +22,15 @@ public class FileSystemResource implements Resource {
     }
 
     /**
+     * 创建一个构造方法 传入 file对象
+     * @param file
+     */
+    public FileSystemResource(File file) {
+        this.file = file;
+        this.path = file.getPath();
+    }
+
+    /**
      *
      * @return
      * @throws IOException

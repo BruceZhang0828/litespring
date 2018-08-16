@@ -18,7 +18,7 @@ public void testGetBean(){
     @Test
     public void testGetBeanFromFileSystemContext(){
         // 需要添加本地文件的额全路径
-        ApplicationContext applicationContext = new FileSystemXmlApplicationContext("H:\\petstore-v1.xml");
+        ApplicationContext applicationContext = new FileSystemXmlApplicationContext("E:\\petstore-v1.xml");
         PetStoreService petStore = (PetStoreService) applicationContext.getBean("petStore");
         Assert.assertNotNull(petStore);
 
