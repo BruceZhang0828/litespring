@@ -28,7 +28,7 @@ public class CustomBooleanEditor extends PropertyEditorSupport {
     public void setAsText(String text) throws IllegalArgumentException {
         String input = (text!=null)?text.trim():null;
 
-        if(this.allowEmpty&& !StringUtils.hasLenth(input)){
+        if(this.allowEmpty&& !StringUtils.hasLength(input)){
             setValue(null);
         }else if((VALUE_TRUE.equalsIgnoreCase(input)||
                 VALUE_ON.equalsIgnoreCase(input)||

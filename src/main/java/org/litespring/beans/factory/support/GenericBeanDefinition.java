@@ -28,6 +28,10 @@ public class GenericBeanDefinition implements BeanDefinition {
         this.beanClassName = beanClassName;
     }
 
+    public GenericBeanDefinition() {
+
+    }
+
     /**
      *
      * @return
@@ -51,6 +55,9 @@ public class GenericBeanDefinition implements BeanDefinition {
     public String getID() {
         		return this.id;
         	}
+    public void setId(String id) {
+        this.id = id;
+    }
 
 
 
@@ -92,5 +99,14 @@ public class GenericBeanDefinition implements BeanDefinition {
     public String getBeanName() {
         return this.beanClassName;
     }
+
+    /**
+     * set beanClassName
+     * @param beanClassName
+     */
+    public void setBeanName(String beanClassName){
+        this.beanClassName = beanClassName;
+    }
+
 
 }

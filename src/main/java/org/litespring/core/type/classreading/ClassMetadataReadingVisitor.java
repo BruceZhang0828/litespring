@@ -1,5 +1,6 @@
 package org.litespring.core.type.classreading;
 
+import org.litespring.core.type.ClassMetadata;
 import org.litespring.util.ClassUtils;
 import org.springframework.asm.ClassVisitor;
 import org.springframework.asm.Opcodes;
@@ -8,7 +9,7 @@ import org.springframework.asm.SpringAsmInfo;
 /**
  * Created by deepbay on 2018/8/16.
  */
-public class ClassMetadataReadingVisitor extends ClassVisitor /*implements ClassMetadata*/ {
+public class ClassMetadataReadingVisitor extends ClassVisitor implements ClassMetadata {
 
     private String className;
 

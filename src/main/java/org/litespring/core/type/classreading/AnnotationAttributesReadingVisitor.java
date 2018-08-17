@@ -27,6 +27,10 @@ final class AnnotationAttributesReadingVisitor extends AnnotationVisitor {
         this.attributesMap = attributesMap;
 
     }
+
+    /**
+     * 方法结束之后
+     */
     @Override
     public final void visitEnd(){
         this.attributesMap.put(this.annotationType, this.attributes);
