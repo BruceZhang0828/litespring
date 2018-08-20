@@ -11,6 +11,7 @@ public class GenericBeanDefinition implements BeanDefinition {
     private String id;
 
     private String beanClassName;
+    private Class<?> beanClass;
 
     private boolean singleton = true;
     private boolean prototype = false;
@@ -64,6 +65,29 @@ public class GenericBeanDefinition implements BeanDefinition {
     public boolean hasConstructorArgumentValus() {
         		return !this.constructorArgument.isEmpty();
         	}
+
+    public Class<?> resolveBeanClass(ClassLoader classLoader) throws ClassNotFoundException {
+        String className = getBeanName();
+        if (className == null) {
+            return null;
+        }
+        Class<?> resolvedClass = classLoader.loadClass(className);
+        this.beanClass = resolvedClass;
+        return resolvedClass;
+    }
+
+    public Class<?> getBeanClass() throws IllegalStateException {
+        if(this.beanClassName == null){
+            throw new IllegalStateException(
+                    "Bean class name [" + this.getBeanName() + "] has not been resolved into an actual Class");
+        }
+        return this.beanClass;
+
+    }
+
+    public boolean hasBeanClass() {
+        return this.beanClass != null;
+    }
 
     /**
      * 是否为 多列

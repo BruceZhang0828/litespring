@@ -31,4 +31,11 @@ public interface BeanDefinition {
     String getID();
 
     boolean hasConstructorArgumentValus();
+
+    /**
+     * 自动注入需要的3个方法
+     */
+    public Class<?> resolveBeanClass(ClassLoader classLoader) throws ClassNotFoundException;
+    public Class<?> getBeanClass() throws IllegalStateException ;
+    public boolean hasBeanClass();
 }
