@@ -39,7 +39,7 @@ public class SimpleTypeConverter implements TypeConverter {
 
                 return (T)defaultEditor.getValue();
             }else{
-                throw new RuntimeException("Todo : can't convert value for "+value +" class:"+requiredType);
+                throw new RuntimeException("Todo : can'tx convert value for "+value +" class:"+requiredType);
             }
         }
 

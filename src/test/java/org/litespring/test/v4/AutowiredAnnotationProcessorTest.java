@@ -30,7 +30,7 @@ public class AutowiredAnnotationProcessorTest {
             if(descriptor.getDependencyType().equals(ItemDao.class)){
                 return itemDao;
             }
-            throw new RuntimeException("can't support types except AccountDao and ItemDao");
+            throw new RuntimeException("can'tx support types except AccountDao and ItemDao");
         }
     };
 

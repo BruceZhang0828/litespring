@@ -170,7 +170,7 @@ public class DefaultBeanFactory extends DefaultSingletonBeanRegistry
             try {
                 bd.resolveBeanClass(this.getBeanClassLoader());
             } catch (ClassNotFoundException e) {
-                throw new RuntimeException("can't load class:"+bd.getBeanName());
+                throw new RuntimeException("can'tx load class:"+bd.getBeanName());
             }
         }
     }

@@ -36,7 +36,7 @@ public class ConstructorResolver {
             //构建字节码类
             beanClass = this.configurableBeanFactory.getBeanClassLoader().loadClass(bd.getBeanName());//?
         } catch (ClassNotFoundException e) {
-            throw  new BeanCreationException(bd.getID(),"Instantiation of bean failed, can't resolve class",e);
+            throw  new BeanCreationException(bd.getID(),"Instantiation of bean failed, can'tx resolve class",e);
         }
         Constructor<?>[] candidates = beanClass.getConstructors();//返回所有的构造方法
         //构建属性解析类
@@ -61,12 +61,12 @@ public class ConstructorResolver {
         }
         //如果找不到一个合适的构造函数
         if(constructorToUse==null){
-            throw new BeanCreationException(bd.getID(), "can't find a apporiate constructor");
+            throw new BeanCreationException(bd.getID(), "can'tx find a apporiate constructor");
         }
         try {
             return constructorToUse.newInstance(argsToUse);
         } catch (Exception e) {
-            throw new BeanCreationException( bd.getID(), "can't find a create instance using "+constructorToUse);
+            throw new BeanCreationException( bd.getID(), "can'tx find a create instance using "+constructorToUse);
         }
     }
 

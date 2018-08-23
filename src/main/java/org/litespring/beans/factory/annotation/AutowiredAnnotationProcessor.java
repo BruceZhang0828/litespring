@@ -64,7 +64,7 @@ public class AutowiredAnnotationProcessor  implements InstantiationAwareBeanPost
         try {
             Method method = ReflectionUtils.findMethod(ann.annotationType(), this.requiredParameterName);
             if (method == null) {
-                // Annotations like @Inject and @Value don't have a method (attribute) named "required"
+                // Annotations like @Inject and @Value don'tx have a method (attribute) named "required"
                 // -> default to required status
                 return true;
             }
