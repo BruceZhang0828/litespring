@@ -22,4 +22,7 @@ public class FileSystemXmlApplicationContext extends AbstractApplicationContext 
     }
 
 
+    public Class<?> getType(String beanName) {
+        return this.factory.getType(beanName);
+    }
 }

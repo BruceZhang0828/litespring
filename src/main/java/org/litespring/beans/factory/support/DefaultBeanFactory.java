@@ -10,6 +10,7 @@ import org.litespring.beans.SimpleTypeConverter;
 import org.litespring.beans.factory.BeanCreationException;
 import org.litespring.beans.factory.BeanDefinitionStoreException;
 import org.litespring.beans.factory.BeanFactory;
+import org.litespring.beans.factory.NoSuchBeanDefinitionException;
 import org.litespring.beans.factory.config.BeanPostProcessor;
 import org.litespring.beans.factory.config.ConfigurableBeanFactory;
 import org.litespring.beans.factory.config.DependencyDescriptor;
@@ -50,6 +51,21 @@ public class DefaultBeanFactory extends DefaultSingletonBeanRegistry
         }
         return creatBean(bd);
     }
+
+    /**
+     * 根據類的id 獲取class對象
+     * @param beanName
+     * @return
+     */
+    public Class<?> getType(String beanName) throws NoSuchBeanDefinitionException {
+        BeanDefinition bd = this.getBeanDefinition(beanName);
+        if(bd == null){
+            throw new NoSuchBeanDefinitionException(beanName);
+        }
+        resolveBeanClass(bd);
+        return bd.getBeanClass();
+    }
+
 
     private Object creatBean(BeanDefinition bd){
 
